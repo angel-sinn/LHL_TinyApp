@@ -63,10 +63,18 @@ app.get("/hello", (req, res) => {
 // -------POST-------
 
 app.post("/urls", (req, res) => {
-  console.log(req.body); // Log the POST request body to the console
+  console.log("req.body:", req.body); // Log the POST request body to the console
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
+});
+
+// -------DELETE-------
+
+app.post("/urls/:shortURL/delete", (req, res) => {
+  // console.log("i want to delete:", req.params.shortURL);
+  delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls");
 });
 
 // -------LISTEN-------
