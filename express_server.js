@@ -60,13 +60,21 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b> World</b></body></html>\n");
 });
 
-// -------POST-------
+// -------CREATE-------
 
 app.post("/urls", (req, res) => {
   console.log("req.body:", req.body); // Log the POST request body to the console
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
+});
+
+// -------UPDATE-------
+
+app.post("/urls/:shortURL", (req, res) => {
+  console.log("req.body:", req.body);
+  urlDatabase[req.params.shortURL] = req.body.newURL;
+  res.redirect("/urls");
 });
 
 // -------DELETE-------
