@@ -62,6 +62,13 @@ const checkUser = function (userDatabase, email) {
 
 // -------ROUTES-------
 
+app.get("/login", (req, res) => {
+  const templateVars = {
+    user: users[req.cookies["user_id"]],
+  };
+  res.render("login", templateVars);
+});
+
 app.get("/register", (req, res) => {
   const templateVars = {
     user: users[req.cookies["user_id"]],
@@ -172,7 +179,6 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
   // console.log("username", req.body.username);
-  res.cookie("username", req.body.username);
   res.redirect("/urls");
 });
 
