@@ -4,7 +4,7 @@ const port = 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.set("view engine", "ejs");
 
@@ -26,11 +26,26 @@ const generateRandomString = function () {
   return generatedURL;
 };
 
+// -------USER DATABASE-------
+
+const users = {
+  userRandomID: {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur",
+  },
+  user2RandomID: {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk",
+  },
+};
+
 // -------ROUTES-------
 
 app.get("/register", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"],
+    user: users[req.cookies["user_id"]],
   };
   res.render("register", templateVars);
 });
@@ -38,21 +53,21 @@ app.get("/register", (req, res) => {
 app.get("/urls", (req, res) => {
   const templateVars = {
     urls: urlDatabase,
-    username: req.cookies["username"],
+    user: users[req.cookies["user_id"]],
   };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"],
+    user: users[req.cookies["user_id"]],
   };
   res.render("urls_new", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"],
+    user: users[req.cookies["user_id"]],
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
   };
@@ -76,7 +91,7 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b> World</b></body></html>\n");
 });
 
-// -------CREATE-------
+// -------CREATE URL-------
 
 app.post("/urls", (req, res) => {
   // console.log("req.body:", req.body); // Log the POST request body to the console
@@ -85,13 +100,33 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
+// -------USER LOGIN-------
+
 app.post("/login", (req, res) => {
   // console.log("username", req.body.username);
   res.cookie("username", req.body.username);
   res.redirect("/urls");
 });
 
-// -------UPDATE-------
+// -------REGISTRATION HANDLER-------
+
+app.post("/register", (req, res) => {
+  // console.log("email:", req.body.email);
+  // console.log("password:", req.body.password);
+
+  let userID = generateRandomString();
+  users[userID] = {
+    id: userID,
+    email: req.body.email,
+    password: req.body.password,
+  };
+
+  // console.log("register", users);
+  res.cookie("user_id", userID);
+  res.redirect("/urls");
+});
+
+// -------UPDATE URL-------
 
 app.post("/urls/:shortURL", (req, res) => {
   // console.log("req.body:", req.body);
@@ -99,12 +134,14 @@ app.post("/urls/:shortURL", (req, res) => {
   res.redirect("/urls");
 });
 
+// -------USER LOGOUT-------
+
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 
-// -------DELETE-------
+// -------DELETE URL-------
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   // console.log("i want to delete:", req.params.shortURL);
