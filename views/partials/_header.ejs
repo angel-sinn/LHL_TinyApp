@@ -26,10 +26,10 @@
     </form>
     <% } else{ %>
     <div>
-      <span class="align-bottom">Logged In As: <%= user.email %></span>
+      <span class="align-bottom">Logged In As: <b><%= user.email %></b></span>
     </div>
     <form method="POST" action="/logout">
-      <input type="submit" class="btn btn-outline-dark" value="Logout" />
+      <input type="submit" class="btn btn-outline-dark ml-2" value="Logout" />
     </form>
     <% } %>
   </nav>

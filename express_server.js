@@ -47,10 +47,10 @@ const generateRandomString = function () {
 
 // -------CHECK EXISTING USER-------
 
-const checkUser = function (userDatabase, email) {
+const checkUser = (userDatabase, email) => {
   for (const user in userDatabase) {
     if (userDatabase[user].email === email) {
-      console.log(userDatabase[user].email);
+      // console.log(userDatabase[user].email);
       return true;
     } else {
       return false;
@@ -59,6 +59,19 @@ const checkUser = function (userDatabase, email) {
 };
 
 // console.log(checkUser(users, "user@example.com"));
+
+// -------FIND USER ID BY EMAIL-------
+
+const userIDByEmail = (userDatabase, email) => {
+  for (const user in userDatabase) {
+    if (userDatabase[user].email === email) {
+      // console.log(userDatabase[user].id);
+      return userDatabase[user].id;
+    }
+  }
+};
+
+// console.log(userIDByEmail(users, "user@example.com"));
 
 // -------ROUTES-------
 
@@ -175,11 +188,23 @@ app.post("/register", (req, res) => {
   }
 });
 
-// -------USER LOGIN-------
+// -------USER LOGIN HANDLER-------
 
 app.post("/login", (req, res) => {
-  // console.log("username", req.body.username);
-  res.redirect("/urls");
+  let loginEmail = req.body.email;
+  let loginPassword = req.body.password;
+  let userID = userIDByEmail(users, loginEmail);
+
+  if (!checkUser(users, loginEmail)) {
+    res.status(403).send(`No account associated with this email address.`);
+  } else if (users[userID].password !== loginPassword) {
+    // console.log("userID:", userID);
+    // console.log("users[userID].password", users[userID].password);
+    res.status(403).send(`Incorrect password. Please try again.`);
+  } else {
+    res.cookie("user_id", userID);
+    res.redirect("/urls");
+  }
 });
 
 // -------USER LOGOUT-------
