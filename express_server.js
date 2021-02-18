@@ -115,6 +115,11 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
+  const urlRecord = urlDatabase[req.params.shortURL];
+  if (!req.cookies["user_id"] || req.cookies["user_id"] !== urlRecord.userID) {
+    res.status(401).send(`You do not have authorization to view this page.`);
+    return;
+  }
   const templateVars = {
     user: users[req.cookies["user_id"]],
     shortURL: req.params.shortURL,
