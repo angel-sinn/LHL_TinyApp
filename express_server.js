@@ -45,7 +45,7 @@ const generateRandomString = function () {
   return generatedURL;
 };
 
-// -------CHECK EXISTING USER-------
+// -------CHECK EXISTING USER FUNCTION-------
 
 const checkUser = (userDatabase, email) => {
   for (const user in userDatabase) {
@@ -57,7 +57,7 @@ const checkUser = (userDatabase, email) => {
   }
 };
 
-// -------FIND USER ID BY EMAIL-------
+// -------FIND USER ID BY EMAIL FUNCTION-------
 
 const userIDByEmail = (userDatabase, email) => {
   for (const user in userDatabase) {
@@ -67,7 +67,7 @@ const userIDByEmail = (userDatabase, email) => {
   }
 };
 
-// -------URLS FOR SPECIFIC USERS-------
+// -------URLS FOR SPECIFIC USERS FUNCTION-------
 
 const urlsForUser = (urlDatabase, id) => {
   let filtered = {};
@@ -148,7 +148,7 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b> World</b></body></html>\n");
 });
 
-// -------CREATE SHORT URL-------
+// -------LIST OF URLS ADDED-------
 
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
