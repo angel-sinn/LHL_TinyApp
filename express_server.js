@@ -96,36 +96,39 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  if (!req.cookies["user_id"]) {
+  const userLoginID = req.cookies["user_id"];
+  if (!userLoginID) {
     res.status(401).send(`Please register or log in before proceeding.`);
   } else {
     const templateVars = {
-      urls: urlsForUser(urlDatabase, req.cookies["user_id"]),
-      user: users[req.cookies["user_id"]],
+      urls: urlsForUser(urlDatabase, userLoginID),
+      user: users[userLoginID],
     };
     res.render("urls_index", templateVars);
   }
 });
 
 app.get("/urls/new", (req, res) => {
-  if (!req.cookies["user_id"]) {
+  const userLoginID = req.cookies["user_id"];
+  if (!userLoginID) {
     res.redirect("/login");
   } else {
     const templateVars = {
-      user: users[req.cookies["user_id"]],
+      user: users[userLoginID],
     };
     res.render("urls_new", templateVars);
   }
 });
 
 app.get("/urls/:shortURL", (req, res) => {
+  const userLoginID = req.cookies["user_id"];
   const urlRecord = urlDatabase[req.params.shortURL];
-  if (!req.cookies["user_id"] || req.cookies["user_id"] !== urlRecord.userID) {
+  if (!userLoginID || userLoginID !== urlRecord.userID) {
     res.status(401).send(`You do not have authorization to view this page.`);
     return;
   }
   const templateVars = {
-    user: users[req.cookies["user_id"]],
+    user: users[userLoginID],
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL].longURL,
   };
@@ -167,8 +170,9 @@ app.post("/urls", (req, res) => {
 // -------UPDATE URL-------
 
 app.post("/urls/:shortURL", (req, res) => {
+  const userLoginID = req.cookies["user_id"];
   const urlRecord = urlDatabase[req.params.shortURL];
-  if (!req.cookies["user_id"] || req.cookies["user_id"] !== urlRecord.userID) {
+  if (!userLoginID || userLoginID !== urlRecord.userID) {
     res.status(401).send(`You do not have authorization to edit this page.`);
     return;
   }
@@ -179,8 +183,9 @@ app.post("/urls/:shortURL", (req, res) => {
 // -------DELETE URL-------
 
 app.post("/urls/:shortURL/delete", (req, res) => {
+  const userLoginID = req.cookies["user_id"];
   const urlRecord = urlDatabase[req.params.shortURL];
-  if (!req.cookies["user_id"] || req.cookies["user_id"] !== urlRecord.userID) {
+  if (!userLoginID || userLoginID !== urlRecord.userID) {
     res.status(401).send(`You do not have authorization to delete this page.`);
     return;
   }
