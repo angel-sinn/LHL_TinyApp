@@ -2,12 +2,18 @@ const express = require("express");
 const app = express();
 const port = 8080;
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
+const cookieSession = require("cookie-session");
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.set("view engine", "ejs");
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["cookie", "session"],
+    maxAge: 24 * 60 * 60 * 1000,
+  })
+);
 
 // -------URL DATABASE-------
 
@@ -83,20 +89,20 @@ const urlsForUser = (urlDatabase, id) => {
 
 app.get("/login", (req, res) => {
   const templateVars = {
-    user: users[req.cookies["user_id"]],
+    user: users[req.session["user_id"]],
   };
   res.render("login", templateVars);
 });
 
 app.get("/register", (req, res) => {
   const templateVars = {
-    user: users[req.cookies["user_id"]],
+    user: users[req.session["user_id"]],
   };
   res.render("register", templateVars);
 });
 
 app.get("/urls", (req, res) => {
-  const userLoginID = req.cookies["user_id"];
+  const userLoginID = req.session["user_id"];
   if (!userLoginID) {
     res.status(401).send(`Please register or log in before proceeding.`);
   } else {
@@ -109,7 +115,7 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  const userLoginID = req.cookies["user_id"];
+  const userLoginID = req.session["user_id"];
   if (!userLoginID) {
     res.redirect("/login");
   } else {
@@ -121,7 +127,7 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  const userLoginID = req.cookies["user_id"];
+  const userLoginID = req.session["user_id"];
   const urlRecord = urlDatabase[req.params.shortURL];
   if (!userLoginID || userLoginID !== urlRecord.userID) {
     res.status(401).send(`You do not have authorization to view this page.`);
@@ -162,7 +168,7 @@ app.post("/urls", (req, res) => {
   urlDatabase[shortURL] = {
     shortURL: shortURL,
     longURL: req.body.longURL,
-    userID: req.cookies["user_id"],
+    userID: req.session["user_id"],
   };
   res.redirect(`/urls/${shortURL}`);
 });
@@ -170,7 +176,7 @@ app.post("/urls", (req, res) => {
 // -------UPDATE URL-------
 
 app.post("/urls/:shortURL", (req, res) => {
-  const userLoginID = req.cookies["user_id"];
+  const userLoginID = req.session["user_id"];
   const urlRecord = urlDatabase[req.params.shortURL];
   if (!userLoginID || userLoginID !== urlRecord.userID) {
     res.status(401).send(`You do not have authorization to edit this page.`);
@@ -183,7 +189,7 @@ app.post("/urls/:shortURL", (req, res) => {
 // -------DELETE URL-------
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  const userLoginID = req.cookies["user_id"];
+  const userLoginID = req.session["user_id"];
   const urlRecord = urlDatabase[req.params.shortURL];
   if (!userLoginID || userLoginID !== urlRecord.userID) {
     res.status(401).send(`You do not have authorization to delete this page.`);
@@ -218,7 +224,7 @@ app.post("/register", (req, res) => {
       password: hash,
     };
     console.log("users:", users);
-    res.cookie("user_id", userID);
+    req.session.user_id = userID;
     res.redirect("/urls");
   }
 });
@@ -235,7 +241,7 @@ app.post("/login", (req, res) => {
   } else if (!bcrypt.compareSync(loginPassword, users[userID].password)) {
     res.status(403).send(`Incorrect password. Please try again.`);
   } else {
-    res.cookie("user_id", userID);
+    req.session.user_id = userID;
     res.redirect("/urls");
   }
 });
@@ -243,7 +249,7 @@ app.post("/login", (req, res) => {
 // -------USER LOGOUT-------
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("user_id");
+  req.session = null;
   res.redirect("/urls");
 });
 
