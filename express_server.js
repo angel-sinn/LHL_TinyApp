@@ -67,6 +67,18 @@ const userIDByEmail = (userDatabase, email) => {
   }
 };
 
+// -------URLS FOR SPECIFIC USERS-------
+
+const urlsForUser = (urlDatabase, id) => {
+  let filtered = {};
+  for (const shortURL in urlDatabase) {
+    if (urlDatabase[shortURL].userID === id) {
+      filtered[shortURL] = urlDatabase[shortURL];
+    }
+  }
+  return filtered;
+};
+
 // -------ROUTES-------
 
 app.get("/login", (req, res) => {
@@ -85,7 +97,7 @@ app.get("/register", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const templateVars = {
-    urls: urlDatabase,
+    urls: urlsForUser(urlDatabase, req.cookies["user_id"]),
     user: users[req.cookies["user_id"]],
   };
   res.render("urls_index", templateVars);
@@ -113,7 +125,10 @@ app.get("/urls/:shortURL", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL].longURL;
-  res.redirect(longURL);
+  const completeURL = longURL.trim().startsWith("http")
+    ? longURL
+    : `http://${longURL}`;
+  res.redirect(URL);
 });
 
 app.get("/", (req, res) => {
@@ -132,20 +147,34 @@ app.get("/hello", (req, res) => {
 
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
-  urlDatabase[shortURL] = req.body.longURL;
+  urlDatabase[shortURL] = {
+    shortURL: shortURL,
+    longURL: req.body.longURL,
+    userID: req.cookies["user_id"],
+  };
   res.redirect(`/urls/${shortURL}`);
 });
 
 // -------UPDATE URL-------
 
 app.post("/urls/:shortURL", (req, res) => {
-  urlDatabase[req.params.shortURL].longURL = req.body.newURL;
+  const urlRecord = urlDatabase[req.params.shortURL];
+  if (req.cookies["user_id"] !== urlRecord.userID) {
+    res.status(401).send(`You do not have authorization to edit this page.`);
+    return;
+  }
+  urlRecord.longURL = req.body.newURL;
   res.redirect("/urls");
 });
 
 // -------DELETE URL-------
 
 app.post("/urls/:shortURL/delete", (req, res) => {
+  const urlRecord = urlDatabase[req.params.shortURL];
+  if (req.cookies["user_id"] !== urlRecord.userID) {
+    res.status(401).send(`You do not have authorization to delete this page.`);
+    return;
+  }
   delete urlDatabase[req.params.shortURL];
   res.redirect("/urls");
 });
