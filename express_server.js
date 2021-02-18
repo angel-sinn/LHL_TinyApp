@@ -83,6 +83,7 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
+  console.log(users);
   const templateVars = {
     user: users[req.cookies["user_id"]],
   };
@@ -181,7 +182,7 @@ app.post("/register", (req, res) => {
       email: req.body.email,
       password: req.body.password,
     };
-    // console.log(users);
+    console.log(users);
 
     res.cookie("user_id", userID);
     res.redirect("/urls");
