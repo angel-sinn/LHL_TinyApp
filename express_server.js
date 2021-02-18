@@ -1,3 +1,5 @@
+// -------REQUIRE-------
+
 const express = require("express");
 const app = express();
 const port = 8080;
@@ -5,8 +7,10 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const cookieSession = require("cookie-session");
 
-app.use(bodyParser.urlencoded({ extended: false }));
+// -------MIDDLEWARE-------
+
 app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cookieSession({
     name: "session",
