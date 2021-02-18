@@ -83,17 +83,27 @@ const urlsForUser = (urlDatabase, id) => {
 // -------ROUTES-------
 
 app.get("/login", (req, res) => {
-  const templateVars = {
-    user: users[req.session["user_id"]],
-  };
-  res.render("login", templateVars);
+  const userLoginID = req.session["user_id"];
+  if (!userLoginID) {
+    const templateVars = {
+      user: users[req.session["user_id"]],
+    };
+    res.render("login", templateVars);
+  } else {
+    res.redirect("/urls");
+  }
 });
 
 app.get("/register", (req, res) => {
-  const templateVars = {
-    user: users[req.session["user_id"]],
-  };
-  res.render("register", templateVars);
+  const userLoginID = req.session["user_id"];
+  if (!userLoginID) {
+    const templateVars = {
+      user: users[req.session["user_id"]],
+    };
+    res.render("register", templateVars);
+  } else {
+    res.redirect("urls");
+  }
 });
 
 app.get("/urls", (req, res) => {
@@ -145,15 +155,12 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
-});
-
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
-
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b> World</b></body></html>\n");
+  const userLoginID = req.session["user_id"];
+  if (!userLoginID) {
+    res.redirect("/login");
+  } else {
+    res.redirect("/urls");
+  }
 });
 
 // -------LIST OF URLS ADDED-------
@@ -201,7 +208,7 @@ app.post("/register", (req, res) => {
     res
       .status(400)
       .send(
-        `One of the fields were empty. Please enter a valid email address and password.`
+        `At least one of the fields were empty. Please enter a valid email address and password.`
       );
   } else if (checkUser(users, req.body.email)) {
     res
