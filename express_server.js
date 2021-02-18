@@ -50,7 +50,6 @@ const generateRandomString = function () {
 const checkUser = (userDatabase, email) => {
   for (const user in userDatabase) {
     if (userDatabase[user].email === email) {
-      // console.log(userDatabase[user].email);
       return true;
     } else {
       return false;
@@ -58,20 +57,15 @@ const checkUser = (userDatabase, email) => {
   }
 };
 
-// console.log(checkUser(users, "user@example.com"));
-
 // -------FIND USER ID BY EMAIL-------
 
 const userIDByEmail = (userDatabase, email) => {
   for (const user in userDatabase) {
     if (userDatabase[user].email === email) {
-      // console.log(userDatabase[user].id);
       return userDatabase[user].id;
     }
   }
 };
-
-// console.log(userIDByEmail(users, "user@example.com"));
 
 // -------ROUTES-------
 
@@ -83,7 +77,6 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  console.log(users);
   const templateVars = {
     user: users[req.cookies["user_id"]],
   };
@@ -134,7 +127,6 @@ app.get("/hello", (req, res) => {
 // -------CREATE SHORT URL-------
 
 app.post("/urls", (req, res) => {
-  // console.log("req.body:", req.body); // Log the POST request body to the console
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
@@ -143,7 +135,6 @@ app.post("/urls", (req, res) => {
 // -------UPDATE URL-------
 
 app.post("/urls/:shortURL", (req, res) => {
-  // console.log("req.body:", req.body);
   urlDatabase[req.params.shortURL] = req.body.newURL;
   res.redirect("/urls");
 });
@@ -151,7 +142,6 @@ app.post("/urls/:shortURL", (req, res) => {
 // -------DELETE URL-------
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  // console.log("i want to delete:", req.params.shortURL);
   delete urlDatabase[req.params.shortURL];
   res.redirect("/urls");
 });
@@ -159,9 +149,6 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 // -------REGISTRATION HANDLER-------
 
 app.post("/register", (req, res) => {
-  // console.log("email:", req.body.email);
-  // console.log("password:", req.body.password);
-
   if (req.body.email === "" || req.body.password === "") {
     res
       .status(400)
@@ -182,7 +169,6 @@ app.post("/register", (req, res) => {
       email: req.body.email,
       password: req.body.password,
     };
-    console.log(users);
 
     res.cookie("user_id", userID);
     res.redirect("/urls");
@@ -199,8 +185,6 @@ app.post("/login", (req, res) => {
   if (!checkUser(users, loginEmail)) {
     res.status(403).send(`No account associated with this email address.`);
   } else if (users[userID].password !== loginPassword) {
-    // console.log("userID:", userID);
-    // console.log("users[userID].password", users[userID].password);
     res.status(403).send(`Incorrect password. Please try again.`);
   } else {
     res.cookie("user_id", userID);
