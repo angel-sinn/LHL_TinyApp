@@ -3,6 +3,7 @@ const app = express();
 const port = 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -51,10 +52,9 @@ const checkUser = (userDatabase, email) => {
   for (const user in userDatabase) {
     if (userDatabase[user].email === email) {
       return true;
-    } else {
-      return false;
     }
   }
+  return false;
 };
 
 // -------FIND USER ID BY EMAIL FUNCTION-------
@@ -210,13 +210,14 @@ app.post("/register", (req, res) => {
       );
   } else {
     let userID = generateRandomString();
+    let hash = bcrypt.hashSync(req.body.password, 10);
 
     users[userID] = {
       id: userID,
       email: req.body.email,
-      password: req.body.password,
+      password: hash,
     };
-
+    console.log("users:", users);
     res.cookie("user_id", userID);
     res.redirect("/urls");
   }
@@ -231,7 +232,7 @@ app.post("/login", (req, res) => {
 
   if (!checkUser(users, loginEmail)) {
     res.status(403).send(`No account associated with this email address.`);
-  } else if (users[userID].password !== loginPassword) {
+  } else if (!bcrypt.compareSync(loginPassword, users[userID].password)) {
     res.status(403).send(`Incorrect password. Please try again.`);
   } else {
     res.cookie("user_id", userID);
