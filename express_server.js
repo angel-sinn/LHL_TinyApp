@@ -6,6 +6,7 @@ const port = 8080;
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const cookieSession = require("cookie-session");
+const { getUserByEmail } = require("./helpers");
 
 // -------MIDDLEWARE-------
 
@@ -65,16 +66,6 @@ const checkUser = (userDatabase, email) => {
     }
   }
   return false;
-};
-
-// -------FIND USER ID BY EMAIL FUNCTION-------
-
-const userIDByEmail = (userDatabase, email) => {
-  for (const user in userDatabase) {
-    if (userDatabase[user].email === email) {
-      return userDatabase[user].id;
-    }
-  }
 };
 
 // -------URLS FOR SPECIFIC USERS FUNCTION-------
@@ -238,7 +229,7 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
   let loginEmail = req.body.email;
   let loginPassword = req.body.password;
-  let userID = userIDByEmail(users, loginEmail);
+  let userID = getUserByEmail(users, loginEmail);
 
   if (!checkUser(users, loginEmail)) {
     res.status(403).send(`No account associated with this email address.`);
