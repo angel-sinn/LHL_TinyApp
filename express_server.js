@@ -128,7 +128,7 @@ app.get("/u/:shortURL", (req, res) => {
   const completeURL = longURL.trim().startsWith("http")
     ? longURL
     : `http://${longURL}`;
-  res.redirect(URL);
+  res.redirect(completeURL);
 });
 
 app.get("/", (req, res) => {
@@ -159,7 +159,7 @@ app.post("/urls", (req, res) => {
 
 app.post("/urls/:shortURL", (req, res) => {
   const urlRecord = urlDatabase[req.params.shortURL];
-  if (req.cookies["user_id"] !== urlRecord.userID) {
+  if (!req.cookies["user_id"] || req.cookies["user_id"] !== urlRecord.userID) {
     res.status(401).send(`You do not have authorization to edit this page.`);
     return;
   }
@@ -171,7 +171,7 @@ app.post("/urls/:shortURL", (req, res) => {
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   const urlRecord = urlDatabase[req.params.shortURL];
-  if (req.cookies["user_id"] !== urlRecord.userID) {
+  if (!req.cookies["user_id"] || req.cookies["user_id"] !== urlRecord.userID) {
     res.status(401).send(`You do not have authorization to delete this page.`);
     return;
   }
