@@ -96,11 +96,15 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  const templateVars = {
-    urls: urlsForUser(urlDatabase, req.cookies["user_id"]),
-    user: users[req.cookies["user_id"]],
-  };
-  res.render("urls_index", templateVars);
+  if (!req.cookies["user_id"]) {
+    res.status(401).send(`Please register or log in before proceeding.`);
+  } else {
+    const templateVars = {
+      urls: urlsForUser(urlDatabase, req.cookies["user_id"]),
+      user: users[req.cookies["user_id"]],
+    };
+    res.render("urls_index", templateVars);
+  }
 });
 
 app.get("/urls/new", (req, res) => {
