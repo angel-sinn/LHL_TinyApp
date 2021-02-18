@@ -6,6 +6,8 @@ const {
   urlsForUser,
 } = require("../helpers");
 
+// -------Databases for testing-------
+
 const testUsers = {
   userRandomID: {
     id: "userRandomID",
