@@ -1,6 +1,6 @@
 // -------GENERATE RANDOM STRING FUNCTION-------
 
-const generateRandomString = function () {
+const generateRandomString = () => {
   let generatedURL = "";
   let characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
