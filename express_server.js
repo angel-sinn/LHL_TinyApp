@@ -69,7 +69,7 @@ app.get("/register", (req, res) => {
     };
     res.render("register", templateVars);
   } else {
-    res.redirect("urls");
+    res.redirect("/urls");
   }
 });
 
