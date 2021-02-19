@@ -4,19 +4,19 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-** General URLs page when not logged in **
+**General URLs page when not logged in**
 
 !["Screenshot of general URLs page"](https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(general).png)
 
-** Registration page **
+**Registration page**
 
 !["Screenshot of registration page"](https://github.com/angel-sinn/tinyapp/blob/master/docs/Registration_Page.png)
 
-** Creating a TinyURL **
+**Creating a TinyURL**
 
 !["Screenshot of creating a TinyURL"](https://github.com/angel-sinn/tinyapp/blob/master/docs/Creating_URL.png)
 
-** My URLs page when logged in **
+**My URLs page when logged in**
 
 !["Screenshot of URLs page after logging in"](https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(logged_in).png)
 
