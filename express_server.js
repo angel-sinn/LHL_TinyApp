@@ -75,15 +75,11 @@ app.get("/register", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const userLoginID = req.session["user_id"];
-  if (!userLoginID) {
-    res.status(401).send(`Please register or log in before proceeding.`);
-  } else {
-    const templateVars = {
-      urls: urlsForUser(urlDatabase, userLoginID),
-      user: users[userLoginID],
-    };
-    res.render("urls_index", templateVars);
-  }
+  const templateVars = {
+    urls: urlsForUser(urlDatabase, userLoginID),
+    user: users[userLoginID],
+  };
+  res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
