@@ -4,10 +4,10 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-!["Screenshot of general URLs page"](<https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(general).png>)
+!["Screenshot of general URLs page"](https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(general).png)
 !["Screenshot of registration page"](https://github.com/angel-sinn/tinyapp/blob/master/docs/Registration_Page.png)
-!["Screenshot of creating a shortened URL"](https://github.com/angel-sinn/tinyapp/blob/master/docs/Creating_URL.png)
-!["Screenshot of URLs page after logging in"](<https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(logged_in).png>)
+!["Screenshot of creating a TinyURL"](https://github.com/angel-sinn/tinyapp/blob/master/docs/Creating_URL.png)
+!["Screenshot of URLs page after logging in"](https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(logged_in).png)
 
 ## Dependencies
 
