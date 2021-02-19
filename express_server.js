@@ -192,7 +192,6 @@ app.post("/register", (req, res) => {
       email: req.body.email,
       password: hash,
     };
-    console.log("users:", users);
     req.session.user_id = userID;
     res.redirect("/urls");
   }
@@ -208,7 +207,9 @@ app.post("/login", (req, res) => {
   if (!checkUser(users, loginEmail)) {
     res.status(403).send(`No account associated with this email address.`);
   } else if (!bcrypt.compareSync(loginPassword, users[userID].password)) {
-    res.status(403).send(`Incorrect password. Please try again.`);
+    res
+      .status(403)
+      .send(`Email Address or password does not match. Please try again.`);
   } else {
     req.session.user_id = userID;
     res.redirect("/urls");
