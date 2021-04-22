@@ -1,6 +1,6 @@
 # TinyApp
 
-TinyApp is a full-stack web application built with the EJS template engine, Express and Node. The app allows users to shorten long URLS much like TinyURL.com and bitly.com.
+TinyApp is a full-stack web application built with the EJS template engine, Express and Node. The app allows users to shorten long URLS much like <https://tinyurl.com/> and <https://bitly.com/>.
 
 ## Project Stack
 
@@ -43,4 +43,4 @@ TinyApp is a full-stack web application built with the EJS template engine, Expr
 1. Fork this repository, and clone your fork of the repository
 2. Install the dependencies with `npm install`
 3. Run the development web server with `npm start`
-4. Open your web browser on `localhost:8080` to start using TinyApp!
+4. Open your web browser on <http://localhost:8080/> to start using TinyApp!
