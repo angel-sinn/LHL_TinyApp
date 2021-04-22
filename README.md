@@ -41,6 +41,9 @@ TinyApp is a full-stack web application built with the EJS template engine, Expr
 ## Getting Started
 
 1. Fork this repository, and clone your fork of the repository
+
 2. Install the dependencies with `npm install`
+
 3. Run the development web server with `npm start`
+
 4. Open your web browser on <http://localhost:8080/> to start using TinyApp!
