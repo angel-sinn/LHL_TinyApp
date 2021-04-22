@@ -1,37 +1,46 @@
 # TinyApp Project
 
-TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (à la bit.ly).
+TinyApp is a full-stack web application built with the EJS template engine, Express and Node. The app allows users to shorten long URLS much like TinyURL.com and bitly.com.
+
+## Project Stack
+
+**Back-End**: EJS, Express, Node
+
+## Project Features
+
+- User authentication
+- Using bcrypt to hash and store passwords securely
+- Using encrypted cookies with cookie-session for added security
 
 ## Final Product
 
+**General URLs page when not logged in**
 
-**:computer:  General URLs page when not logged in  :computer:**
+!["Screenshot of general URLs page"](<https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(general).png>)
 
-!["Screenshot of general URLs page"](https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(general).png)
-
-**:computer:  Registration page  :computer:**
+**Registration page**
 
 !["Screenshot of registration page"](https://github.com/angel-sinn/tinyapp/blob/master/docs/Registration_Page.png)
 
-**:computer:  Creating a TinyURL  :computer:**
+**Creating a TinyURL**
 
 !["Screenshot of creating a TinyURL"](https://github.com/angel-sinn/tinyapp/blob/master/docs/Creating_URL.png)
 
-**:computer:  My URLs page when logged in  :computer:**
+**My URLs page when logged in**
 
-!["Screenshot of URLs page after logging in"](https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(logged_in).png)
+!["Screenshot of URLs page after logging in"](<https://github.com/angel-sinn/tinyapp/blob/master/docs/MyURLs_Page(logged_in).png>)
 
 ## Dependencies
 
-- Node.js
-- Express
+- Bcrypt
+- Body-parser
+- Cookie-session
 - EJS
-- bcrypt
-- body-parser
-- cookie-session
+- Express
 
 ## Getting Started
 
-- Install all dependencies (using the `npm install` command).
-- Run the development web server using the `node express_server.js` command.
-- Open your web browser and enjoy the efficiency of sharing a shortened link with everyone!
+1. Fork this repository, and clone your fork of the repository
+2. Install the dependencies with `npm install`
+3. Run the development web server with `npm start`
+4. Open your web browser on `localhost:8080` to start using TinyApp!
