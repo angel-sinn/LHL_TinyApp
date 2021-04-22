@@ -1,4 +1,4 @@
-# TinyApp Project
+# TinyApp
 
 TinyApp is a full-stack web application built with the EJS template engine, Express and Node. The app allows users to shorten long URLS much like TinyURL.com and bitly.com.
 
